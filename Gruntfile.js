@@ -1,7 +1,27 @@
  module.exports = function(grunt) {
 
+  var commitMessage = "Testing Without Prompt";
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+    prompt: {
+      getCommitMessage: {
+        options: {
+          questions: [
+            {
+              type: '<question type>',
+              message: 'Enter commit message.',
+              default: 'New commit',
+              when: function(answer) {
+                commitMessage = answer;
+              }
+            }
+          ]
+        }
+      }
+    },
+
     concat: {
       dist: {
         src : ['public/client/*','public/lib/*'], 
@@ -68,7 +88,7 @@
 
     exec: {
       prodServer: {
-        cmd: 'git add . && git commit && git push origin master'
+        cmd: 'git add . && git commit -am \'' + commitMessage +'\' && git push origin master'
       }
     }
 
@@ -83,6 +103,8 @@
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-prompt');
+
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -120,6 +142,7 @@
   });
 
   grunt.registerTask('deploy', function(){
-      grunt.task.run(['jshint', 'test', 'build', 'exec:prodServer']);
+      /* Prompt user for commit message and store as variable */
+      grunt.task.run(['jshint', 'test', 'build', 'prompt:getCommitMessage', 'exec:prodServer']);
   });
 };

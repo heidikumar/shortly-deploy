@@ -1,8 +1,12 @@
-module.exports = function(grunt) {
+ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      dist: {
+        src : ['public/client/*','public/lib/*'], 
+        dest: 'public/build/production.js'
+      }
     },
 
     mochaTest: {
@@ -21,11 +25,15 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      dist:{
+        src: 'public/build/production.js', 
+        dest: 'public/build/uglified.min.js'
+      }
     },
 
     jshint: {
       files: [
-        // Add filespec list here
+        'public/client/*'
       ],
       options: {
         force: 'true',
@@ -60,8 +68,10 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: ['git add . && git commit -am \'Test Commit\' && git push origin master']
       }
-    },
+    }
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -90,11 +100,14 @@ module.exports = function(grunt) {
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
+
   grunt.registerTask('test', [
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build', [ 
+    'concat', 
+    'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -105,9 +118,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-      // add your production server task here
-  ]);
-
-
+  grunt.registerTask('deploy', function(){
+      grunt.task.run(['jshint', 'test', 'build', 'shell:prodServer']);
+  });
 };

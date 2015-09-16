@@ -66,9 +66,9 @@
       }
     },
 
-    shell: {
+    exec: {
       prodServer: {
-        command: ['git add . && git commit -am \'Test Commit\' && git push origin master']
+        cmd: 'git add . && git commit && git push origin master'
       }
     }
 
@@ -82,6 +82,7 @@
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-exec');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -119,6 +120,6 @@
   });
 
   grunt.registerTask('deploy', function(){
-      grunt.task.run(['jshint', 'test', 'build', 'shell:prodServer']);
+      grunt.task.run(['jshint', 'test', 'build', 'exec:prodServer']);
   });
 };

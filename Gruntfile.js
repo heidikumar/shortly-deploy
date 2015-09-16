@@ -1,6 +1,6 @@
  module.exports = function(grunt) {
 
-  var commitMessage = "Testing Without Prompt";
+  // var commitMessage = "Testing Without Prompt";
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -10,12 +10,10 @@
         options: {
           questions: [
             {
+              config: 'commitMessage',
               type: '<question type>',
               message: 'Enter commit message.',
               default: 'New commit',
-              when: function(answer) {
-                commitMessage = answer;
-              }
             }
           ]
         }
@@ -88,7 +86,7 @@
 
     exec: {
       prodServer: {
-        cmd: 'git add . && git commit -am \'' + commitMessage +'\' && git push origin master'
+        cmd: 'git add . && git commit -am \'' + grunt.config('commitMessage') +'\' && git push origin master'
       }
     }
 

@@ -123,6 +123,7 @@
 
 
   grunt.registerTask('test', [
+    'jshint',
     'mochaTest'
   ]);
 
@@ -141,6 +142,6 @@
 
   grunt.registerTask('deploy', function(){
       /* Prompt user for commit message and store as variable */
-      grunt.task.run(['jshint', 'test', 'build', 'prompt:getCommitMessage', 'exec:prodServer']);
+      grunt.task.run(['test', 'build', 'prompt:getCommitMessage', 'exec:prodServer']);
   });
 };

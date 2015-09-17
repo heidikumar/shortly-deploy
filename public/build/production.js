@@ -56,7 +56,7 @@ Shortly.createLinkView = Backbone.View.extend({
   shortenUrl: function(e) {
     e.preventDefault();
     var $form = this.$el.find('form .text');
-    var link = new Shortly.Link({ url: $form.val() })
+    var link = new Shortly.Link({ url: $form.val() })   //makes a new Shortly link at the form's url
     link.on('request', this.startSpinner, this);
     link.on('sync', this.success, this);
     link.on('error', this.failure, this);
@@ -98,7 +98,6 @@ Shortly.createLinkView = Backbone.View.extend({
 Shortly.Link = Backbone.Model.extend({
   urlRoot: '/links'
 });
-
 Shortly.LinkView = Backbone.View.extend({
   className: 'link',
 

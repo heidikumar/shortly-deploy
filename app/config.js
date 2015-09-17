@@ -23,12 +23,13 @@ var urlSchema = mongoose.Schema({
     url: String, 
     base_url: String, 
     visits: Number, 
-    title: String
+    title: String, 
+    code: String
 });
 
-userSchema.methods.initialize = function(){
-    this.on('creating', this.hashPassword);
-};
+// userSchema.methods.initialize = function(){
+//     this.on('creating', this.hashPassword);
+// };
 
 userSchema.methods.comparePassword = function(attemptedPassword, hash, callback) {
     bcrypt.compare(attemptedPassword, hash, function(err, isMatch) {
@@ -47,6 +48,13 @@ urlSchema.methods.initialize = function(){
     model.set('code', shasum.digest('hex').slice(0, 5));
   });
 };
+
+urlSchema.statics.hashUrl = function(url){
+    var shasum = crypto.createHash('sha1');
+    shasum.update(url);
+
+    return shasum.digest('hex').slice(0, 5);  
+}
 
 
 exports.User = mongoose.model('User', userSchema);

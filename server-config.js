@@ -18,6 +18,7 @@ app.configure(function() {
 
 app.get('/', util.checkUser, handler.renderIndex);
 app.get('/create', util.checkUser, handler.renderIndex);
+//maybe app.post?
 
 app.get('/links', util.checkUser, handler.fetchLinks);
 app.post('/links', handler.saveLink);

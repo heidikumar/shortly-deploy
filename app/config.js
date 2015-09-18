@@ -27,10 +27,6 @@ var urlSchema = mongoose.Schema({
     code: String
 });
 
-// userSchema.methods.initialize = function(){
-//     this.on('creating', this.hashPassword);
-// };
-
 userSchema.methods.comparePassword = function(attemptedPassword, hash, callback) {
     bcrypt.compare(attemptedPassword, hash, function(err, isMatch) {
       callback(isMatch);
@@ -39,14 +35,6 @@ userSchema.methods.comparePassword = function(attemptedPassword, hash, callback)
 
 userSchema.statics.hashPassword = function(password){
     return bcrypt.hashSync(password);
-};
-
-urlSchema.methods.initialize = function(){
-  this.on('creating', function(model, attrs, options){
-    var shasum = crypto.createHash('sha1');
-    shasum.update(model.get('url'));
-    model.set('code', shasum.digest('hex').slice(0, 5));
-  });
 };
 
 urlSchema.statics.hashUrl = function(url){
@@ -59,9 +47,3 @@ urlSchema.statics.hashUrl = function(url){
 
 exports.User = mongoose.model('User', userSchema);
 exports.Url = mongoose.model('Url', urlSchema);
-
-// module.exports = db;
-// module.exports = User;
-// module.exports = Url;
-
-// var temp = new mongoose.model('Url', urlSchema);
